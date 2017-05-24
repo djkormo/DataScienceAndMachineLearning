@@ -24,7 +24,7 @@ ggplot(dat,aes(bimodal))+
         axis.title=element_text(size=14))+
   geom_segment(aes(x=0,xend=100,y=0,yend=0),size=1.5,
                arrow=arrow(length=unit(0.4,"cm")))+
-  geom_segment(aes(x=0,xend=100,y=0,yend=0.03),size=1.5,
+  geom_segment(aes(x=0,xend=0,y=0,yend=0.03),size=1.5,
                arrow=arrow(length=unit(0.4,"cm")))+
   geom_density(size=1.5)
   
