@@ -1,0 +1,45 @@
+library(zoo) 
+library(forecast)
+data <- read.csv2("gdp.csv")
+tsData <- ts(data, start = c(1950,1),frequency=1)
+approximation <- na.approx(tsData[,6])
+interpolation <- na.interp(tsData[,6])
+par(mfrow =c(1,3))
+plot(tsData[,6], xlab = "Czas", ylab = "Wartoœæ", main = "Dane Ÿród³owe", lwd=3)
+plot(approximation, xlab = "Czas", ylab = "Wartoœæ", main = "Dane uzupe³nione przez aproksymacjê", lwd=3)
+plot(interpolation, xlab = "Czas", ylab = "Wartoœæ", main = "Dane uzupe³nione przez interpolacjê", lwd=3)
+
+
+library(TTR)
+kings <- scan("http://robjhyndman.com/tsdldata/misc/kings.dat",skip=3) 
+tsKings <- ts(kings)
+tsKingsSmooth <- SMA(tsKings, n=5)
+par(mfrow =c(2,1))
+plot(tsKings,lwd=4, xlab = "Indeks", ylab = "Wiek", main = "Czas ¿ycia")
+plot(tsKingsSmooth,lwd=4, xlab = "Indeks", ylab = "Wiek", main = "Wyg³adzony czas ¿ycia")
+
+
+par(mfrow =c(3,1))
+tsKingsSmooth3 <- smooth(kings)
+tsKingsSmooth5 <- runmed(kings,5)
+plot(tsKings,lwd=4, xlab = "Indeks", ylab = "Wiek", main = "Czas ¿ycia")
+plot.ts(tsKingsSmooth3,lwd=4,xlab = "Indeks", ylab = "Wiek", main = "Czas ¿ycia wyg³adzony funkcj¹ smooth")
+plot.ts(tsKingsSmooth5,lwd=4,xlab = "Indeks", ylab = "Wiek", main = "Czas ¿ycia wyg³adzony funkcj¹ runmed")
+
+souvenir <- scan("http://robjhyndman.com/tsdldata/data/fancy.dat")
+tsSouvenir<- ts(souvenir, frequency=12, start=c(1987,1))
+logTsSouvenir <- log(tsSouvenir)
+par(mfrow =c(1,2))
+plot(tsSouvenir,lwd=4, xlab = "Lata", ylab = "Wartoœæ sprzeda¿y", main = "Oryginalny szereg czasowy")
+plot(logTsSouvenir,lwd=4,xlab = "Lata", ylab = "Wartoœæ sprzeda¿y", main = "Szereg czasowy po zlogarytmizowaniu")
+
+diffTsSouvenir <- diff(tsSouvenir)
+plot(tsSouvenir,lwd=4, xlab = "Lata", ylab = "Wartoœæ sprzeda¿y", main = "Oryginalny szereg czasowy")
+plot(diffTsSouvenir,lwd=4, xlab = "Lata", ylab = "Wartoœæ sprzeda¿y", main = "Zró¿nicowany szereg czasowy")
+
+library(tseries)
+Box.test(kings, lag = 10, type = "Box-Pierce")
+Box.test(kings, lag = 10, type = "Ljung-Box")
+
+adf.test(kings, alternative = "stationary")
+kpss.test(kings)
